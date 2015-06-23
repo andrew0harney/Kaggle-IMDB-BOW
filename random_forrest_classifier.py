@@ -2,6 +2,7 @@
 import os
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import roc_auc_score
 from nltk.corpus import words as nltk_words
 from nltk.corpus import stopwords
 import pandas as pd
@@ -25,11 +26,13 @@ train = pd.read_csv(os.path.join(os.getcwd(), 'data', 'labeledTrainData.tsv'), h
 train = train.reindex(np.random.permutation(len(train))).reset_index()
 test = train[20000:]
 train = train[:20000]
+
+
 vectoriser = CountVectorizer(analyzer = "word",   \
                              tokenizer = None,    \
                              preprocessor = None, \
                              stop_words = None,   \
-                             max_features = 5000)
+                             max_features = 1000)
 
 #Train random forest with bag of words and sentiment
 clean_train_reviews = [" ".join(review_to_words(review)) for review in train['review'].values.tolist()]
@@ -47,3 +50,5 @@ result = forest.predict(test_data_features)
 
 output = pd.DataFrame( data={"id":test["id"], "sentiment":result, "actual":test["sentiment"]} )
 output.to_csv(os.path.join(os.getcwd(), 'results', 'bowRandomForestResults.csv'), index=False, quoting=3)
+
+print roc_auc_score(test['sentiment'], result)
