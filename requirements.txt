@@ -47,3 +47,32 @@ dependencies:
   - beautifulsoup==3.2.1
   - beautifulsoup4==4.3.2
 
+name: BOWPopcorn
+dependencies:
+- nltk=3.0.3=np19py27_0
+- nose=1.3.7=py27_0
+- numpy=1.9.2=py27_0
+- openssl=1.0.1k=1
+- pandas=0.16.2=np19py27_0
+- pip=7.0.3=py27_0
+- python=2.7.10=0
+- python-dateutil=2.4.2=py27_0
+- pytz=2015.4=py27_0
+- pyyaml=3.11=py27_1
+- readline=6.2=2
+- scikit-learn=0.16.1=np19py27_0
+- scipy=0.15.1=np19py27_0
+- setuptools=17.1.1=py27_0
+- six=1.9.0=py27_0
+- sqlite=3.8.4.1=1
+- tk=8.5.18=0
+- yaml=0.1.6=0
+- zlib=1.2.8=0
+- pip:
+  - beautifulsoup==3.2.1
+  - beautifulsoup4==4.3.2
+  - boto==2.38.0
+  - bz2file==0.98
+  - gensim==0.11.1.post1
+  - smart-open==1.2.1
+
