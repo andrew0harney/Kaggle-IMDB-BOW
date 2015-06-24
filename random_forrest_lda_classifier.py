@@ -91,7 +91,7 @@ train_data_features = np.hstack((train_data_features, train_topics))
 
 #Train sentiment
 log.info('Training sentiment')
-forest = RandomForestClassifier(n_estimators = 150)
+forest = RandomForestClassifier(n_estimators = num_forest_estimators)
 forest = forest.fit(train_data_features, train["sentiment"])
 joblib.dump(forest, os.path.join(os.getcwd(), 'models', 'forest.model'))
 
