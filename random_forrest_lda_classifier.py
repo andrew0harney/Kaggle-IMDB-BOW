@@ -27,15 +27,12 @@ def review_to_words(review):
     text = soup.getText()
     return filter(lambda word: word in ALLOWED_WORDS , match_whitespace.sub(' ', match_non_word_chars.sub('', text.lower())).split(' '))
 
+
 def convert_lda_output(prediction):
-    if len(prediction) == 2:
-        return [prob for _, prob in prediction]
-    else:
-        topic_num, value = prediction[0]
-        if topic_num:
-            return [0, value]
-        else:
-            return [value, 0]
+    output = [0,0]
+    for i,x in prediction:
+        output[i] = x
+    return output
 
 
 pprint.pprint('Loading train/test set')
