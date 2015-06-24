@@ -9,3 +9,6 @@ conda_requriements:
 nltk_downloads:
 	$(ENV_BIN_DIR)/python -m nltk.downloader stopwords
 	$(ENV_BIN_DIR)/python -m nltk.downloader words
+	$(ENV_BIN_DIR)/python -m nltk.downloader maxent_treebank_pos_tagger
+
+
