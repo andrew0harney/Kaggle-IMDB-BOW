@@ -64,7 +64,7 @@ tokenised_train = [vocab.doc2bow(review.split()) for review in reviews]
 
 pprint.pprint('Training LDA')
 lda = models.ldamodel.LdaModel(corpus=tokenised_train, id2word=vocab, num_topics=2, passes=100)
-lda.save(fname=os.path.join(os.getcwd(), 'models', 'lda.model'))glasg0w3
+lda.save(fname=os.path.join(os.getcwd(), 'models', 'lda.model'))
 
 
 pprint.pprint('Adding LDA features to training')
