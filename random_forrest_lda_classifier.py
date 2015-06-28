@@ -18,8 +18,8 @@ import logging
 
 #Config
 num_lda_topics = 2
-num_forest_estimators = 150
-num_lda_passes = 100
+num_forest_estimators = 100
+num_lda_passes = 1
 train_set_percent = 80
 
 
@@ -106,7 +106,7 @@ test_topics = np.array([convert_lda_output(prediction) for prediction in test_ld
 test_data_features = np.hstack((vectoriser.transform(clean_test_reviews).toarray(), test_topics))
 
 log.info('Predicting')
-result = forest.predict(test_data_features)
+result = forest.predict(test_data_features)[:,1]
 
 output = pd.DataFrame( data={"id":test["id"], "sentiment":result, "actual":test["sentiment"]} )
 output.to_csv(os.path.join(os.getcwd(), 'results', 'bowRandomForestResults.csv'), index=False, quoting=3)
