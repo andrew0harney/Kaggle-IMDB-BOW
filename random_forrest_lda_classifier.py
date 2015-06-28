@@ -18,8 +18,8 @@ import logging
 
 #Config
 num_lda_topics = 2
-num_forest_estimators = 100
-num_lda_passes = 1
+num_forest_estimators = 150
+num_lda_passes = 100
 train_set_percent = 80
 
 
@@ -50,6 +50,9 @@ def get_semantics(sentence):
 log.info('Loading train/test set')
 train = pd.read_csv(os.path.join(os.getcwd(), 'data', 'labeledTrainData.tsv'), header=0, \
                 delimiter="\t", quoting=3)
+ldaTrain = pd.read_csv(os.path.join(os.getcwd(), 'data', 'unlabeledTrainData.tsv'), header=0, \
+                delimiter="\t", quoting=3)
+
 train = train.reindex(np.random.permutation(len(train))).reset_index()
 test = train[train_set_percent*len(train)/100:]
 train = train[:train_set_percent*len(train)/100]
@@ -70,15 +73,18 @@ semanticLDAVectoriser = CountVectorizer(analyzer = "word",
                              stop_words = None,
                              max_features = 5000)
 
-#Train LDA for positive and negative topics
+
 log.info('Cleaning training data')
 clean_train_reviews = [review for review in train['review'].values.tolist()]
 reviews = [" ".join(review_to_words(review)) for review in clean_train_reviews]
 train_data_features = vectoriser.fit_transform(reviews).toarray()
 
-semanticLDAVectoriser.fit_transform([" ".join(get_semantics(review)) for review in reviews])
+#Train LDA for positive and negative topics
+clean_lda_reviews = [review for review in ldaTrain['review'].values.tolist()]
+ldaReviews = [" ".join(review_to_words(review)) for review in clean_lda_reviews]
+semanticLDAVectoriser.fit_transform([" ".join(get_semantics(review)) for review in ldaReviews])
 vocab = corpora.Dictionary([semanticLDAVectoriser.get_feature_names()])
-lda_tokenised_train = [vocab.doc2bow(get_semantics(review)) for review in reviews]
+lda_tokenised_train = [vocab.doc2bow(get_semantics(review)) for review in ldaReviews]
 
 log.info('Training LDA')
 lda = models.ldamodel.LdaModel(corpus=lda_tokenised_train, id2word=vocab, num_topics=num_lda_topics, passes=num_lda_passes)
@@ -106,7 +112,7 @@ test_topics = np.array([convert_lda_output(prediction) for prediction in test_ld
 test_data_features = np.hstack((vectoriser.transform(clean_test_reviews).toarray(), test_topics))
 
 log.info('Predicting')
-result = forest.predict(test_data_features)[:,1]
+result = forest.predict_proba(test_data_features)[:,1]
 
 output = pd.DataFrame( data={"id":test["id"], "sentiment":result, "actual":test["sentiment"]} )
 output.to_csv(os.path.join(os.getcwd(), 'results', 'bowRandomForestResults.csv'), index=False, quoting=3)
