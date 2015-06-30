@@ -11,4 +11,5 @@ https://www.kaggle.com/c/word2vec-nlp-tutorial/leaderboard
 TODO
 =============
  TF-IDF
+ logistic regression for classification
  word2vec 
