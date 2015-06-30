@@ -6,6 +6,8 @@ Results
   BOW Random Forest + positive class probability + lda adjective only - 0.9125  
 
 
+https://www.kaggle.com/c/word2vec-nlp-tutorial/leaderboard
+
 TODO
 =============
  TF-IDF
