@@ -18,8 +18,8 @@ import logging
 
 #Config
 num_lda_topics = 2
-num_forest_estimators = 150
-num_lda_passes = 100
+num_forest_estimators = 200
+num_lda_passes = 200
 train_set_percent = 80
 
 
@@ -91,7 +91,8 @@ lda = models.ldamodel.LdaModel(corpus=lda_tokenised_train, id2word=vocab, num_to
 lda.save(fname=os.path.join(os.getcwd(), 'models', 'lda.model'))
 
 log.info('Adding LDA features to training')
-train_lda_out = lda[lda_tokenised_train]
+train_lda_prediction = [vocab.doc2bow(get_semantics(review)) for review in reviews]
+train_lda_out = lda[train_lda_prediction]
 train_topics = np.array([convert_lda_output(prediction) for prediction in train_lda_out])
 train_data_features = np.hstack((train_data_features, train_topics))
 
