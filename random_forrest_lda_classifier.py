@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 import os
-from sklearn.feature_extraction.text import CountVectorizer
-from sklearn.ensemble import RandomForestClassifier
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import roc_auc_score
 from nltk.corpus import words as nltk_words
 from nltk import word_tokenize
@@ -18,8 +18,7 @@ import logging
 
 #Config
 num_lda_topics = 2
-num_forest_estimators = 200
-num_lda_passes = 200
+num_lda_passes = 100
 train_set_percent = 80
 
 
@@ -60,18 +59,18 @@ train = train[:train_set_percent*len(train)/100]
 log.info('Training set %d' % (len(train)))
 log.info('Testing set %d' % (len(test)))
 
-vectoriser = CountVectorizer(analyzer = "word",
+vectoriser = TfidfVectorizer(analyzer = "word",
                             tokenizer = None,
                              preprocessor = None,
                              stop_words = None,
-                             max_features = 5000)
+                             max_features=5000)
 
 
-semanticLDAVectoriser = CountVectorizer(analyzer = "word",
+semanticLDAVectoriser = TfidfVectorizer(analyzer = "word",
                             tokenizer = None,
                              preprocessor = None,
                              stop_words = None,
-                             max_features = 5000)
+                             max_features=5000)
 
 
 log.info('Cleaning training data')
@@ -98,7 +97,7 @@ train_data_features = np.hstack((train_data_features, train_topics))
 
 #Train sentiment
 log.info('Training sentiment')
-forest = RandomForestClassifier(n_estimators = num_forest_estimators)
+forest = LogisticRegression()
 forest = forest.fit(train_data_features, train["sentiment"])
 joblib.dump(forest, os.path.join(os.getcwd(), 'models', 'forest.model'))
 
